@@ -1,0 +1,54 @@
+<!--
+DEVERLOPED BY : JINGJO CHA CHA CHA INDY ZONE !!
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .pl {
+            font-size:18px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="hostname"></h1>
+    <h2>Client Online : <label id="c_online"></label></h2>
+    <div id="players">
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            var c_online = document.getElementById("c_online")
+            function fetchData() {
+                return new Promise((resolve, reject) => {
+                    fetch('https://servers-frontend.fivem.net/api/servers/single/z3kl6d')
+                    .then(data => data.json())
+                    .then(json => resolve(json))
+                })
+            }
+            const render = (data) => {
+                let html_players = ''
+                c_online.innerHTML = data.clients
+                document.getElementById("hostname").innerHTML = data.hostname
+                data.players.map((item, idx) => {
+                    html_players += `<li class="pl">${idx+1}. ${item.name} | ${item.identifiers.join("  |  ")} }</li>` 
+                })
+                document.getElementById("players").innerHTML = html_players
+
+
+            }
+            (async function(){
+                var result = await fetchData()
+                console.log(result)
+                render(result.Data)
+                //console.log(result.Data)
+            })()
+        })
+    </script>
+</body>
+</html>
